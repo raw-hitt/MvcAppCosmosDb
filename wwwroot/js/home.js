@@ -5,14 +5,24 @@
 
 function GetAllEmployees() {
 
-    var apiUrl = 'api/Home/GetAllEmployees';
+    var apiUrl = 'api/Employees/GetAllEmployees';
 
     $.ajax({
         type: 'GET',
         dataType: "json",
         url: apiUrl,
-        success: function (data, status, xhr) {
-            console.log('data: ', data);
+        success: function (datas, status, xhr) {
+
+            console.log('data: ', datas);
+            var jsonData = JSON.parse(datas.data);
+
+            var htmlContent = '<ul>';
+            for (var key in jsonData[0]) {
+                htmlContent += '<li><strong>' + key + ':</strong> ' + jsonData[0][key] + '</li>';
+            }
+            htmlContent += '</ul>';
+            $('#employees').html(htmlContent);
+
         },
         error: function (error) {
             console.log(error);
