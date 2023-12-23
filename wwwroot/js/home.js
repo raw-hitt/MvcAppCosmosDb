@@ -13,14 +13,27 @@ function GetAllEmployees() {
         url: apiUrl,
         success: function (datas, status, xhr) {
 
-            console.log('data: ', datas);
+            
             var jsonData = JSON.parse(datas.data);
+            console.log('data: ', jsonData);
 
-            var htmlContent = '<ul>';
+            var htmlContent = '<table><tr>';
             for (var key in jsonData[0]) {
-                htmlContent += '<li><strong>' + key + ':</strong> ' + jsonData[0][key] + '</li>';
+                htmlContent += '<th><strong>' + key + ':</strong> </th>';
             }
-            htmlContent += '</ul>';
+            htmlContent += '</tr>';
+
+
+
+            for (var key in jsonData[0]) {
+                htmlContent += '<tr>';
+                for (var key in jsonData[0]) {
+                    htmlContent += '<td>' + jsonData[0][key] + '</td>';
+                }
+                htmlContent += '</tr>';
+            }
+
+            htmlContent += '</table>';
             $('#employees').html(htmlContent);
 
         },
