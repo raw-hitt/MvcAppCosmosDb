@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MvcAppCosmosDb.Models;
+using MvcAppCosmosDb.Models.Data;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace MvcAppCosmosDb.Controllers
 {
@@ -17,6 +19,8 @@ namespace MvcAppCosmosDb.Controllers
         {
             return View();
         }
+
+       
 
         public IActionResult Privacy()
         {

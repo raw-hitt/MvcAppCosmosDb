@@ -1,7 +1,26 @@
+using Microsoft.Azure.Cosmos;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddSingleton<CosmosClient>(serviceProvider =>
+{
+    IHttpClientFactory httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+
+    CosmosClientOptions cosmosClientOptions = new CosmosClientOptions
+    {
+        HttpClientFactory = httpClientFactory.CreateClient,
+        ConnectionMode = ConnectionMode.Gateway
+    };
+
+    return new CosmosClient("<cosmosdb_connectionstring>");
+});
+ 
 
 var app = builder.Build();
 
