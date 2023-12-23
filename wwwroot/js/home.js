@@ -42,5 +42,5 @@ function GetAllEmployees() {
             alert('There was an error when processing your request');
 
         }
-    });
+    })
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using MvcAppCosmosDb.Models;
 using MvcAppCosmosDb.Models.Data;
+using MvcAppCosmosDb.Services;
 using Newtonsoft.Json;
 
 namespace MvcAppCosmosDb.Api
@@ -11,18 +13,33 @@ namespace MvcAppCosmosDb.Api
     public class EmployeesController : ControllerBase
     {
         private readonly ILogger<EmployeesController> _logger;
+        private readonly CosmosClient _cosmosClient;
 
-        public EmployeesController(ILogger<EmployeesController> logger)
+        public EmployeesController(ILogger<EmployeesController> logger, CosmosClient cosmosClient)
         {
             _logger = logger;
+            _cosmosClient = cosmosClient;
+
         }
 
 
         [HttpGet]
-        public IActionResult GetAllEmployees()
+        public async Task<IActionResult> GetAllEmployees()
         {
             try
             {
+
+                #region getting data
+                Database database =  _cosmosClient.GetDatabase("Tablesdb");
+                Container container = database.GetContainer("employees");
+
+
+
+                var query = container.GetItemQueryIterator<Employees>("SELECT * FROM employees");
+                #endregion
+
+
+
                 List<Employees> emp = new List<Employees>();
 
 

@@ -1,6 +1,9 @@
 using Microsoft.Azure.Cosmos;
-
-
+using Microsoft.Extensions.Options;
+using MvcAppCosmosDb.Models;
+using MvcAppCosmosDb.Services;
+using MvcAppCosmosDb.Services.Interfaces;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,19 +11,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddSingleton<CosmosClient>(serviceProvider =>
+#region Cosmos Db
+
+try
 {
-    IHttpClientFactory httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-
-    CosmosClientOptions cosmosClientOptions = new CosmosClientOptions
+    builder.Services.AddSingleton<CosmosClient>(sp =>
     {
-        HttpClientFactory = httpClientFactory.CreateClient,
-        ConnectionMode = ConnectionMode.Gateway
-    };
+        var cosmosDbSettings = sp.GetRequiredService<IOptions<CosmosDbSettings>>().Value;
+        return new CosmosClient("https://rohitpawar.table.cosmos.azure.com:443/", "WLjhe30V2efFBdYns9jTpUGaQXJ8ZTaGE8VCrPhMkdqstPAFGVnMHzYpQedephsAWMynm7D1F6rMACDboGKIAA==");
+    });
 
-    return new CosmosClient("<cosmosdb_connectionstring>");
-});
- 
+}
+catch (Exception ex)
+{
+
+    throw ex;
+}
+#endregion
+
 
 var app = builder.Build();
 
